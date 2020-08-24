@@ -156,13 +156,13 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 	len = 0;
 	caps = 0;
 	running = 1;
-	failure = 0;
 	oldc = INIT;
 
 	if (!XkbGetIndicatorState(dpy, XkbUseCoreKbd, &indicators))
 		caps = indicators & 1;
 
 	while (running && !XNextEvent(dpy, &ev)) {
+		failure = 0;
 		if (ev.type == KeyPress) {
 			explicit_bzero(&buf, sizeof(buf));
 			num = XLookupString(&ev.xkey, buf, sizeof(buf), &ksym, 0);

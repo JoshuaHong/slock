@@ -1,0 +1,29 @@
+# Description
+# The failure flag was not being reset after a failure occures.
+# This causes a problem with the failonclear flag in the config file.
+# When the password buffer is empty the failure color should not be displayed
+# if the failonclear flag is set to 0. However, this was only true if an
+# incorrect password was not previously entered. After an incorrect
+# password is entered, the failure color was displayed when the buffer is
+# cleared even with the failonclear flag set to 1.
+# The solution was to reset the failure flag after every keypress.
+
+diff --git a/slock.c b/slock.c
+index 5fb62e6..eec7045 100644
+--- a/slock.c
++++ b/slock.c
+@@ -156,13 +156,13 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+ 	len = 0;
+ 	caps = 0;
+ 	running = 1;
+-	failure = 0;
+ 	oldc = INIT;
+ 
+ 	if (!XkbGetIndicatorState(dpy, XkbUseCoreKbd, &indicators))
+ 		caps = indicators & 1;
+ 
+ 	while (running && !XNextEvent(dpy, &ev)) {
++		failure = 0;
+ 		if (ev.type == KeyPress) {
+ 			explicit_bzero(&buf, sizeof(buf));
+ 			num = XLookupString(&ev.xkey, buf, sizeof(buf), &ksym, 0);
