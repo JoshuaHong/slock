@@ -1,5 +1,5 @@
 # Description
-# Add capscolor to work with with backgroundimage patch
+# Make capscolor patch to work with backgroundimage patch.
 
 diff --git a/slock.c b/slock.c
 index cc6dcc0..1e70a4c 100644

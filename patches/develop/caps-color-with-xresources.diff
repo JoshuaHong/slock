@@ -1,0 +1,15 @@
+# Descripton
+# Make capscolor patch to work with xresources patch.
+
+diff --git a/config.def.h b/config.def.h
+index 61c1417..4c95e3f 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -16,6 +16,7 @@ ResourcePref resources[] = {
+ 		{ "color0",       STRING,  &colorname[INIT] },
+ 		{ "color4",       STRING,  &colorname[INPUT] },
+ 		{ "color1",       STRING,  &colorname[FAILED] },
++		{ "color3",       STRING,  &colorname[CAPS] },
+ };
+ 
+ /* treat a cleared input like a wrong password (color) */
