@@ -1,0 +1,16 @@
+# Description
+# Display CAPS color even if Caps Lock is pressed with an empty password buffer.
+
+diff --git a/slock.c b/slock.c
+index 1e70a4c..5fb62e6 100644
+--- a/slock.c
++++ b/slock.c
+@@ -212,7 +212,7 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+ 				}
+ 				break;
+ 			}
+-			color = len ? (caps ? CAPS : INPUT) : ((failure || failonclear) ? FAILED : INIT);
++			color = len ? (caps ? CAPS : INPUT) : ((failure || failonclear) ? FAILED : (caps ? CAPS :INIT));
+ 			if (running && oldc != color) {
+ 				for (screen = 0; screen < nscreens; screen++) {
+ 					if (locks[screen]->bgmap && color != FAILED && color != CAPS)
