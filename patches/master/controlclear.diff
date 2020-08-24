@@ -1,0 +1,34 @@
+# Description
+# Adds an additional configuration parameter, controlkeyclear. When set to 1,
+# slock will no longer change to the failure color if a control key is pressed
+# while the buffer is empty. This is useful if, for example, you wake your
+# monitor up by pressing a control key and don't want to spoil the detection of
+# failed unlocking attempts.
+
+diff --git a/config.def.h b/config.def.h
+index 9855e21..c9effa5 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -10,3 +10,6 @@ static const char *colorname[NUMCOLS] = {
+ 
+ /* treat a cleared input like a wrong password (color) */
+ static const int failonclear = 1;
++
++/* allow control key to trigger fail on clear */
++static const int controlkeyclear = 0;
+diff --git a/slock.c b/slock.c
+index 5ae738c..da9ffb2 100644
+--- a/slock.c
++++ b/slock.c
+@@ -180,8 +180,9 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+ 					passwd[--len] = '\0';
+ 				break;
+ 			default:
+-				if (num && !iscntrl((int)buf[0]) &&
+-				    (len + num < sizeof(passwd))) {
++				if (controlkeyclear && iscntrl((int)buf[0]))
++					continue;
++				if (num && (len + num < sizeof(passwd))) {
+ 					memcpy(passwd + len, buf, num);
+ 					len += num;
+ 				}
